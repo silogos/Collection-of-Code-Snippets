@@ -12,33 +12,44 @@ function autoDeleteConversationFacebook() {
 
   let countTry = 0;
   async function deleteConversation() {
-    const firstChat = listChat.children[1].children[0].children[0];
+    try {
+      const firstChat = listChat.children[1].children[0].children[0];
+      if (!firstChat) throw new Error("Failed to get first chat");
+      firstChat.querySelector('[aria-label="Menu"]').click();
 
-    if (!firstChat) {
-      if (checkBoxsUnchecked.length === 0) {
-        if (countTry > 3) return false;
-        countTry += 1;
-        await wait(1500);
-        deleteConversation();
+      await wait();
+      const menuItemDelete = (a = [
+        ...document.querySelectorAll('[role="menuitem"]'),
+      ].find((el) => {
+        return el.children[1].innerText === "Delete chat";
+      }));
+      if (!menuItemDelete) throw new Error("Failed to get menuItemDelete");
+      menuItemDelete.click();
+
+      await wait();
+      const buttonConfirmDelete = document.querySelectorAll(
+        '[aria-label="Delete chat"][role="button"]'
+      )[1];
+      if (!buttonConfirmDelete)
+        throw new Error("Failed to get button confirm delete");
+      buttonConfirmDelete.click();
+
+      await wait();
+      countTry = 0;
+      deleteConversation();
+    } catch (error) {
+      console.error(error);
+      countTry += 1;
+
+      if (countTry > 3) {
+        console.log("Timeout 3 time");
+
+        return false;
       }
 
-      countTry = 0;
+      await wait();
+      deleteConversation();
     }
-
-    firstChat.querySelector('[aria-label="Menu"]').click();
-    await wait();
-    const menuItemDelete = document.querySelectorAll('[role="menuitem"]')[7];
-    // console.log({ menuItemDelete });
-    menuItemDelete.click();
-    await wait();
-    const buttonConfirmDelete = document.querySelectorAll(
-      '[aria-label="Delete chat"][role="button"]'
-    )[1];
-    // console.log({ buttonConfirmDelete });
-    buttonConfirmDelete.click();
-
-    await wait();
-    deleteConversation();
   }
 
   deleteConversation();
