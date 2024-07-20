@@ -10,10 +10,22 @@ function autoDeleteConversationFacebook() {
     throw new Error("List chat not found");
   }
 
+  let countTry = 0;
   async function deleteConversation() {
-    const chats = listChat.children[1].children[0].children[0];
+    const firstChat = listChat.children[1].children[0].children[0];
 
-    chats.querySelector('[aria-label="Menu"]').click();
+    if (!firstChat) {
+      if (checkBoxsUnchecked.length === 0) {
+        if (countTry > 3) return false;
+        countTry += 1;
+        await wait(1500);
+        deleteConversation();
+      }
+
+      countTry = 0;
+    }
+
+    firstChat.querySelector('[aria-label="Menu"]').click();
     await wait();
     const menuItemDelete = document.querySelectorAll('[role="menuitem"]')[7];
     // console.log({ menuItemDelete });
