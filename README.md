@@ -1,3 +1,4 @@
+#Collection of Code Snippets
 
 ## Module Reference
 
