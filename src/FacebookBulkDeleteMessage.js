@@ -1,8 +1,6 @@
-function wait(timeout = 1000) {
-  return new Promise((res) => setTimeout(res, timeout));
-}
+import wait from "./utils/wait.js";
 
-function autoDeleteConversationFacebook() {
+export default function autoDeleteConversationFacebook() {
   const listChat = document.querySelector('[aria-label="Chats"]').children[0]
     .children[0].children[0];
 
@@ -38,12 +36,9 @@ function autoDeleteConversationFacebook() {
       countTry = 0;
       deleteConversation();
     } catch (error) {
-      console.error(error);
       countTry += 1;
 
       if (countTry > 3) {
-        console.log("Timeout 3 time");
-
         return false;
       }
 
@@ -54,3 +49,5 @@ function autoDeleteConversationFacebook() {
 
   deleteConversation();
 }
+
+autoDeleteConversationFacebook();

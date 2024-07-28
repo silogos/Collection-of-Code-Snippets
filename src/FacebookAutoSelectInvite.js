@@ -1,4 +1,4 @@
-function autoInviteFacebook() {
+export default function autoInviteFacebook() {
   const titleModalInvite = "Invite followers to this group"; // This depend on your language at facebook
 
   let countTry = 0;
@@ -32,3 +32,5 @@ function autoInviteFacebook() {
 
   selectCheckBox();
 }
+
+autoInviteFacebook();
